@@ -1,0 +1,56 @@
+<div class="container">
+  <header class="header">
+    <h1>Solicitudes</h1>
+    <a routerLink="/solicitudes/nueva" class="btn btn-primary">+ Nueva solicitud</a>
+  </header>
+
+  <div class="filtros">
+    <label>
+      Estado:
+      <select (change)="onFiltroEstadoChange($any($event.target).value)">
+        <option value="">Todos</option>
+        <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+      </select>
+    </label>
+
+    <label>
+      Tipo:
+      <select (change)="onFiltroTipoChange($any($event.target).value)">
+        <option value="">Todos</option>
+        <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+      </select>
+    </label>
+  </div>
+
+  <div *ngIf="loading()" class="estado-carga">Cargando solicitudes...</div>
+  <div *ngIf="error()" class="estado-error">{{ error() }}</div>
+  <div *ngIf="!loading() && !error() && solicitudes().length === 0" class="estado-vacio">
+    No hay solicitudes que coincidan con el filtro.
+  </div>
+
+  <table *ngIf="!loading() && solicitudes().length > 0" class="tabla">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of solicitudes()">
+        <td>{{ s.tipo }}</td>
+        <td>{{ s.descripcion }}</td>
+        <td>{{ s.fechaInicio | date: 'short' }}</td>
+        <td>{{ s.fechaFin | date: 'short' }}</td>
+        <td><span [class]="claseEstado(s.estado)">{{ s.estado }}</span></td>
+        <td>
+          <button (click)="aprobar(s.id)" [disabled]="s.estado !== 'en_revision'">Aprobar</button>
+          <button (click)="rechazar(s.id)" [disabled]="s.estado !== 'en_revision'">Rechazar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
