@@ -1,0 +1,51 @@
+<div class="container">
+  <h1>Nueva solicitud</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <label>
+      Tipo
+      <select formControlName="tipo">
+        <option value="transporte">Transporte</option>
+        <option value="permiso">Permiso</option>
+        <option value="insumo">Insumo</option>
+      </select>
+    </label>
+
+    <label>
+      Descripción
+      <textarea formControlName="descripcion" rows="3"></textarea>
+      <span class="error" *ngIf="f.descripcion.touched && f.descripcion.invalid">
+        Debe tener al menos 5 caracteres
+      </span>
+    </label>
+
+    <label>
+      Solicitante (id/empleado)
+      <input formControlName="solicitanteId" type="text" />
+      <span class="error" *ngIf="f.solicitanteId.touched && f.solicitanteId.invalid">
+        Requerido
+      </span>
+    </label>
+
+    <label>
+      Recurso (opcional, ej. id del vehículo)
+      <input formControlName="recursoId" type="text" />
+    </label>
+
+    <label>
+      Fecha inicio
+      <input formControlName="fechaInicio" type="datetime-local" />
+    </label>
+
+    <label>
+      Fecha fin
+      <input formControlName="fechaFin" type="datetime-local" />
+    </label>
+
+    <div class="estado-error" *ngIf="errorEnvio()">{{ errorEnvio() }}</div>
+
+    <button type="submit" [disabled]="enviando()">
+      {{ enviando() ? 'Enviando...' : 'Crear solicitud' }}
+    </button>
+  </form>
+</div>
